@@ -11,7 +11,7 @@ class Array
 public:
 	Array(int size, int grow = 1) : m_size{ size },  m_grow { grow }
 	{
-		m_capacity = (size + grow );
+		m_capacity = (size);
 		m_array = new T[m_capacity]{};
 	}
 
@@ -30,12 +30,7 @@ public:
 	}
 	bool isEmpty()
 	{
-		int count{};
-		for (int i{ 0 }; i < m_capacity; ++i)
-		{
-			if (m_array[i] == 0) ++count;
-		}
-		if (count == m_capacity)
+		if (m_size == 0)
 		{
 			return true;
 		}
@@ -49,7 +44,7 @@ public:
 		m_grow = grow;
 		if (capacity > m_capacity)
 		{
-			resize(capacity);
+			resize(capacity+grow);
 		}
 		else if (capacity < m_capacity)
 		{
@@ -69,24 +64,25 @@ public:
 	{
 		return m_size - 1;
 	}
-	void freeExtra(int extraMemory)
+	void freeExtra()
 	{
-		T* newArr = new T[m_capacity + extraMemory]{};
-		for (int i{}; i < m_capacity; ++i)
+		T* newArr = new T[m_size]{};
+		for (int i{}; i < m_size; ++i)
 		{
 			newArr[i] = m_array[i];
 		}
 		delete[] m_array;
 		m_array = newArr;
-		m_capacity += extraMemory;
+		m_capacity = m_size;
 
 	}
 	void removeAll()
 	{
+		m_size = 0; // Если просто m_size = 0, то при выводе массива все равно видно, что элементы не удалились
 		for (int i{}; i < m_capacity; ++i)
 		{
 			m_array[i] = 0;
-		}
+		} 
 	}
 
 	void addElement(T number)
@@ -100,7 +96,7 @@ public:
 	}
 	void resize(int capacity)
 	{
-		T* newArr = new T[capacity];
+		T* newArr = new T[capacity]{};
 		for (int i{}; i < m_size; ++i)
 		{
 			newArr[i] = m_array[i];
@@ -126,16 +122,21 @@ public:
 		return 0;
 	}
 
-	void Append(const Array&, const Array& rhs)
+	void append(Array& array1, Array& array2)
 	{
-		T* newArr = new T[m_capacity + rhs.m_capacity]{};
-		for (int i{}; i < m_capacity; ++i)
+		T* newArray = new T[array1.m_capacity + array2.m_capacity]{};
+		for (int i{}; i < array1.m_size; ++i)
 		{
-			newArr[i] = m_array[i];
+			newArray[i] = array1.m_array[i];
 		}
-		delete[] m_array;
-		m_array = newArr;
-		m_capacity = m_capacity + rhs.m_capacity;
+		for (int i = array1.m_size, j = 0; i < array1.m_size + array2.m_size && j < array2.m_size; ++i, ++j)
+		{
+			newArray[i] = array2.m_array[j];
+		}
+		delete[] array1.m_array;
+		array1.m_array = newArray;
+		array1.m_size += array2.m_size;
+		array1.m_capacity += array2.m_capacity;
 	}
 	//T getAt(int index) // то же самое, что и T& operator[](int index)
 	//{
@@ -147,11 +148,7 @@ public:
 	}
 	void getData()
 	{
-		std::cout << "\nArray address: " << &m_array << std::endl;
-		for (int i{ 0 }; i < m_size; ++i)
-		{
-			std::cout << "Element [" << i << "] " << "address: " << &m_array[i] << std::endl;
-		}
+		std::cout << "\nArray address: " << &m_array[0] << std::endl;
 
 	}
 	int insterAt(int index, T number)
@@ -161,7 +158,22 @@ public:
 			std::cout << "Error! Index must be at least 0 and maximum of " << m_capacity - 1 << std::endl;
 			return -1;
 		}
-		m_array[index] = number;
+		T* newArray = new T[m_capacity+=1]{};
+		if (m_size >= index)
+		{
+			for (int i{}; i < index; ++i)
+			{
+				newArray[i] = m_array[i];
+			}
+			newArray[index] = number;
+			for (int i = index+1, j = index; i < m_size+1 && j < m_size; ++i, ++j)
+			{
+				newArray[i] = m_array[j];
+			}
+		}
+		delete[] m_array;
+		m_array = newArray;
+		++m_size;
 		return 0;
 	}
 	int removeAt(int index)

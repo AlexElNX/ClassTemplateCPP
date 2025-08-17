@@ -1,4 +1,5 @@
-﻿  Array.cpp
-  dz31_v2.cpp
-  Generating Code...
+﻿  dz31_v2.cpp
+D:\Programming\C++ Itstep\VS\dz31_v2\dz31_v2\Array.h(2,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  (compiling source file 'dz31_v2.cpp')
+  
   dz31_v2.vcxproj -> D:\Programming\C++ Itstep\VS\dz31_v2\x64\Debug\dz31_v2.exe
