@@ -53,7 +53,7 @@ int main()
     arr2.printArray();
     std::cout << "\n\n\n\n";
 
-    arr.append(arr, arr2);
+    arr.append(arr2);
 
     arr.printArray();
     std::cout << "\n\n\n\n";
@@ -63,7 +63,7 @@ int main()
     std::cout << "\n\n\n\n";
 
 
-    arr.getData();
+    std::cout << "Data: " << arr.getData() << std::endl;
     if (arr.setAt(2, 999) == -1) return -1;
     std::cout << "\n\n\n\n";
     arr.printArray();
